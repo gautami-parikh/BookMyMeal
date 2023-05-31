@@ -18,6 +18,8 @@ public class RedeemService {
 	@Autowired
 	private TaskScheduler taskScheduler;
 	
+	@Autowired
+	private HolidayDao holidayDao;
 	
 	public boolean reedemcoupon(Redeemdto redeemdto) {
 		
@@ -26,8 +28,12 @@ public class RedeemService {
             LocalDate currentdate = LocalDate.now();
             
             
-            	Coupon coupon = new Coupon();	
-            	if(redeemdto.getStatus().equals(Status.FALSE)) {
+            	Coupon coupon = new Coupon();	//change of code
+            	boolean isHoliday =redeemdto.getDate().getDayOfWeek()==DayOfWeek.SUNDAY || redeemdto.getDate().getDayOfWeek()==DayOfWeek.SATURDAY;
+            	Optional<Holiday> disabled = holidayDao.findByDate(redeemdto.getDate());
+
+            	if(redeemdto.getStatus().equals(Status.FALSE)&& !(isHoliday || disabled.isPresent())) {
+            		//till here
             		coupon.setCouponId(redeemdto.getCouponId());
             		
                 	coupon.setDate(currentdate);
