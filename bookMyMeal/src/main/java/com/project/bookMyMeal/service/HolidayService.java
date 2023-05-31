@@ -19,8 +19,11 @@ public class HolidayService {
 	
 	public boolean CheckHoliday(Holiday holiday) {
 		
+		//change of code
+		
+		boolean isWeekend = holiday.getdate().getDayOfWeek()==DayOfWeek.SUNDAY || holiday.getdate().getDayOfWeek()==DayOfWeek.SATURDAY;
 		Optional<Holiday> disabled = holidaydao.findByDate(holiday.getdate());
-		if(disabled.isPresent()) {
+		if(disabled.isPresent() || isWeekend) {
 			return true;
 		}
 		return false;
